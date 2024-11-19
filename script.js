@@ -138,7 +138,7 @@ const renderWhiskies = (data) => {
     whiskyContainer.innerHTML = ''; // Clear container
 
     data.forEach(whisky => {
-        const stars = generateStars(whisky.rating);
+        const stars = whisky.wishlist ? '<div class="wishlist">Wishlist</div>' : generateStars(whisky.rating);
         const flag = `<span class="fi fi-${whisky.flagIcon}"></span>`; // Flag from FlagIcons CDN
 
         const cardHTML = `
@@ -146,12 +146,14 @@ const renderWhiskies = (data) => {
                 <div class="info-container">
                     <div>
                         <h2 class="whisky-name">${whisky.name}</h2>
+                        <p>${whisky.description}</p>
                         <p class="whisky-details">
-                            ${stars}<br>
-                            ${flag} ${whisky.country} - ${whisky.region}<br><br>
+                            ${flag} ${whisky.country} - ${whisky.region}<br>
+                            ${stars}<br><br>
                             <img src="assets/icons/whisky.png" class="icon" />${whisky.type}<br>
                             <img src="assets/icons/money.png" class="icon" />£${whisky.price}.00<br>
                             <img src="assets/icons/flavour.png" class="icon" />${whisky.flavour}<br>
+                            Brand: ${whisky.brand}<br>
                         </p>
                     </div>
                     
@@ -163,6 +165,8 @@ const renderWhiskies = (data) => {
                 <p class="whisky-review">
                     <strong>Review:</strong> ${whisky.review}
                 </p>
+
+                <a href="${whisky.link}" target="_blank" class="button">Info</a>
             </div>
         `;
         whiskyContainer.innerHTML += cardHTML;

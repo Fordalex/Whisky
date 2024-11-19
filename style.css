@@ -25,6 +25,17 @@ select {
 .icon {
     width: 30px;
     height: 30px;
+    margin-right: 10px;
+}
+
+.wishlist {
+    background-color: #131313;
+    border-color: #1d1d1d;
+    color: #f9f9f9;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100px;
+    text-align: center;
 }
 
 /* Card container */
