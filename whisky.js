@@ -1,3 +1,42 @@
+window.brands = [
+    {
+        name: "Cardhu",
+        logo: "cardhu.png",
+    },
+    {
+        name: "Glen Moray",
+        logo: "glen-moray.png",
+    },
+    {
+        name: "Woodsman",
+        logo: "woodsman.png",
+    },
+    {
+        name: "Clubman",
+        logo: "clubman.png",
+    },
+    {
+        name: "Woodford",
+        logo: "woodford.png",
+    },
+    {
+        name: "Glenfiddich",
+        logo: "glenfiddich.png",
+    },
+    {
+        name: "GlenAllachie",
+        logo: "glenallachie.png",
+    },
+    {
+        name: "Lagg",
+        logo: "lagg.png",
+    },
+    {
+        name: "Monkey Shoulder",
+        logo: "monkey-shoulder.png",
+    }
+];
+
 window.whiskies = [
     {
         name: "Cardhu Gold Reserve Single Malt Scotch Whisky",
@@ -8,8 +47,8 @@ window.whiskies = [
         price: 30,
         type: "Single Malt",
         review: '',
-        rating: 0,
-        flavour: "Peaty & Smoky",
+        rating: 3,
+        flavour: "",
         flagIcon: "gb",
         country: "Scotland",
         region: "Speyside",
@@ -17,6 +56,7 @@ window.whiskies = [
         caskType: "",
         link: "https://www.masterofmalt.com/whiskies/cardhu/cardhu-gold-reserve-whisky/",
         wishlist: false,
+        purchased: '2024-11-21'
     },
     {
         name: "Glen Moray Single Malt Scotch Whisky",
@@ -27,7 +67,7 @@ window.whiskies = [
         price: 20,
         type: "Single Malt",
         review: '',
-        rating: 0,
+        rating: 3,
         flavour: "Rich & Sweet",
         flagIcon: "gb",
         country: "Scotland",
@@ -36,6 +76,7 @@ window.whiskies = [
         caskType: "",
         link: "https://www.masterofmalt.com/whiskies/glen-moray/glen-moray-elgin-classic-whisky/",
         wishlist: false,
+        purchased: '2024-11-21'
     },
     {
         name: "Woodsman",
@@ -170,4 +211,61 @@ window.whiskies = [
         link: "https://www.amazon.co.uk/gp/product/B08H6JBMR2/ref=ewc_pr_img_1?smid=A3P5ROKL5A1OLE&psc=1",
         wishlist: true,
     },
+    {
+        name: "GlenAllachie Meikle Toir",
+        description: "(The Chinquapin One)",
+        brand: "GlenAllachie",
+        age: 'N/A',
+        image: "meikle-toir-the-chinquapin-one-whisky.webp",
+        price: 95,
+        type: "Single Malt",
+        review: '',
+        rating: 0,
+        flavour: "",
+        flagIcon: "gb",
+        country: "Scotland",
+        region: "Speyside",
+        bottleCount: 0,
+        caskType: "",
+        link: "https://www.masterofmalt.com/whiskies/glenallachie/meikle-toir-the-chinquapin-one-whisky/",
+        wishlist: true,
+    },
+    {
+        name: "Lagg Corriecravie",
+        description: "(The Arran Malt)",
+        brand: "Lagg",
+        age: 'N/A',
+        image: "lagg-corriecravie-whisky.webp",
+        price: 65,
+        type: "Single Malt",
+        review: '',
+        rating: 0,
+        flavour: "",
+        flagIcon: "gb",
+        country: "Scotland",
+        region: "Island",
+        bottleCount: 0,
+        caskType: "",
+        link: "https://www.masterofmalt.com/whiskies/lagg/lagg-corriecravie-whisky/",
+        wishlist: true,
+    },
+    {
+        name: "Monkey Shoulder",
+        description: "Blended Scotch Whisky",
+        brand: "Monkey Shoulder",
+        age: 'N/A',
+        image: "monkey-shoulder-blended-scotch-whisky.webp",
+        price: 30,
+        type: "Blended Whisky",
+        review: '',
+        rating: 0,
+        flavour: "",
+        flagIcon: "gb",
+        country: "",
+        region: "",
+        bottleCount: 0,
+        caskType: "",
+        link: "https://www.masterofmalt.com/whiskies/monkey-shoulder-blended-scotch-whisky/",
+        wishlist: true,
+    }
 ]

@@ -7,32 +7,24 @@ const generateStars = (rating) => {
     const halfStar = '<i class="fas fa-star-half-alt"></i>';
     const emptyStar = '<i class="far fa-star"></i>';
 
-    // Add full stars
     for (let i = 0; i < Math.floor(rating); i++) {
         stars += fullStar;
     }
-
-    // Add half star if rating has 0.5
     if (rating % 1 !== 0) {
         stars += halfStar;
     }
-
-    // Fill the remaining with empty stars
     while (stars.split('<i').length - 1 < 5) {
         stars += emptyStar;
     }
-
     return stars;
 };
 
 // Function to generate country flag
 const generateCountryFlag = (country) => {
     const flagIcons = {
-        Scotland: '<i class="fas fa-flag"></i>', // Replace with a real flag icon as needed
-        // Add more countries if necessary
+        Scotland: '<i class="fas fa-flag"></i>',
     };
-
-    return flagIcons[country] || country; // Fallback to country name if flag is not available
+    return flagIcons[country] || country;
 };
 
 /// Helper to generate unique options for a dropdown
@@ -46,12 +38,37 @@ const createDropdown = (id, label, options) => {
         .map(option => `<option value="${option}">${option}</option>`)
         .join('');
     return `
-        <label for="${id}">${label}:</label>
-        <select id="${id}">
-            <option value="all">All</option>
-            ${optionsHTML}
-        </select>
+        <div class="col-12 col-md-6 col-lg-2">
+            <label for="${id}">${label}:</label>
+            <select id="${id}">
+                <option value="all">All</option>
+                ${optionsHTML}
+            </select>
+        </div>
     `;
+};
+
+// Save filters and sorting to localStorage
+const saveToLocalStorage = () => {
+    const allControls = document.querySelectorAll('#controls select');
+    const filterSettings = {};
+    allControls.forEach(control => {
+        filterSettings[control.id] = control.value;
+    });
+    localStorage.setItem('filterSettings', JSON.stringify(filterSettings));
+};
+
+// Load filters and sorting from localStorage
+const loadFromLocalStorage = () => {
+    const filterSettings = JSON.parse(localStorage.getItem('filterSettings'));
+    if (filterSettings) {
+        Object.keys(filterSettings).forEach(id => {
+            const control = document.getElementById(id);
+            if (control) {
+                control.value = filterSettings[id];
+            }
+        });
+    }
 };
 
 // Generate filter and sorting controls dynamically
@@ -60,6 +77,7 @@ const renderControls = () => {
         { id: 'filter-region', label: 'Filter by Region', attribute: 'region' },
         { id: 'filter-country', label: 'Filter by Country', attribute: 'country' },
         { id: 'filter-flavour', label: 'Filter by Flavour', attribute: 'flavour' },
+        { id: 'filter-type', label: 'Filter by Type', attribute: 'type' },
     ];
 
     const sorters = [
@@ -80,21 +98,25 @@ const renderControls = () => {
     const sortersHTML = sorters
         .map(
             sorter => `
-            <label for="${sorter.id}">${sorter.label}:</label>
-            <select id="${sorter.id}">
-                <option value="none">None</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+            <div class="col-12 col-md-6 col-lg-2">
+                <label for="${sorter.id}">${sorter.label}:</label>
+                <select id="${sorter.id}">
+                    <option value="none">None</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
         `
         )
         .join('');
 
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls';
+    controlsContainer.className = 'row';
     controlsContainer.innerHTML = controlsHTML + sortersHTML;
 
     document.body.insertBefore(controlsContainer, document.getElementById('whiskyContainer'));
+    loadFromLocalStorage(); // Apply stored settings
 };
 
 // Generic filter and sort logic
@@ -103,6 +125,7 @@ const filterAndSortData = (data) => {
         { id: 'filter-region', attribute: 'region' },
         { id: 'filter-country', attribute: 'country' },
         { id: 'filter-flavour', attribute: 'flavour' },
+        { id: 'filter-type', attribute: 'type' },
     ];
 
     const sorters = [
@@ -110,7 +133,6 @@ const filterAndSortData = (data) => {
         { id: 'sort-rating', attribute: 'rating' },
     ];
 
-    // Apply filters
     let filteredData = [...data];
     filters.forEach(filter => {
         const value = document.getElementById(filter.id).value;
@@ -119,7 +141,6 @@ const filterAndSortData = (data) => {
         }
     });
 
-    // Apply sorting
     sorters.forEach(sorter => {
         const value = document.getElementById(sorter.id).value;
         if (value === 'asc') {
@@ -132,41 +153,54 @@ const filterAndSortData = (data) => {
     return filteredData;
 };
 
+function bottlesHtml(bottleCount) {
+    let bottles = '';
+    for (let i = 0; i < bottleCount; i++) {
+        bottles += '<img src="assets/icons/bottle.png" class="whisky-bottle-count" />';
+    }
+    return bottles;
+}
+
 // Render whisky cards
 const renderWhiskies = (data) => {
     const whiskyContainer = document.getElementById('whiskyContainer');
-    whiskyContainer.innerHTML = ''; // Clear container
-
+    whiskyContainer.innerHTML = '';
+    
     data.forEach(whisky => {
-        const stars = whisky.wishlist ? '<div class="wishlist">Wishlist</div>' : generateStars(whisky.rating);
-        const flag = `<span class="fi fi-${whisky.flagIcon}"></span>`; // Flag from FlagIcons CDN
-
+        const rating = whisky.wishlist ? '<div class="wishlist">Wishlist</div>' : generateStars(whisky.rating);
+        const flag = `<span class="fi fi-${whisky.flagIcon}"></span>`;
         const cardHTML = `
-            <div class="card">
-                <div class="info-container">
-                    <div>
-                        <h2 class="whisky-name">${whisky.name}</h2>
-                        <p>${whisky.description}</p>
-                        <p class="whisky-details">
-                            ${flag} ${whisky.country} - ${whisky.region}<br>
-                            ${stars}<br><br>
-                            <img src="assets/icons/whisky.png" class="icon" />${whisky.type}<br>
-                            <img src="assets/icons/money.png" class="icon" />£${whisky.price}.00<br>
-                            <img src="assets/icons/flavour.png" class="icon" />${whisky.flavour}<br>
-                            Brand: ${whisky.brand}<br>
-                        </p>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="whisky-container">
+                    <div class="row">
+                        <div class="col-8">
+                            <h2 class="whisky-name">${whisky.name}</h2>
+                            <p class="whisky-description">${whisky.description}</p>
+                            <p class="whisky-details">
+                            <p class="whisky-location">${flag} ${whisky.country} - ${whisky.region}</p>
+                            
+                            ${rating}<br>
+                            ${bottlesHtml(whisky.bottleCount)}<br><br>
+
+                            <p class="whisky-info"><b>Type:</b> ${whisky.type}<br></p>
+                            <p class="whisky-info"><b>Price:</b> £${whisky.price}.00<br></p>
+                            <p class="whisky-info"><b>Flavour:</b> ${whisky.flavour}<br></p>
+                            <p class="whisky-info"><b>Brand:</b> ${whisky.brand}<br></p>
+                            <p class="whisky-info"><b>Cask:</b> ${whisky.cask}<br></p>
+                            </p>
+                        </div>
+                        
+                        <div class="col-4">
+                            <img src="assets/images/whiskies/${whisky.image}" alt="${whisky.name}" class="whisky-image" />
+                        </div>
                     </div>
-                    
-                    <div class="whisky-image-container">
-                        <img src="assets/images/${whisky.image}" alt="${whisky.name}" class="whisky-image" />
-                    </div>
+
+                    <p class="whisky-review">
+                        <strong>Review:</strong> ${whisky.review}
+                    </p>
+
+                    <a href="${whisky.link}" target="_blank" class="button">Info</a>
                 </div>
-
-                <p class="whisky-review">
-                    <strong>Review:</strong> ${whisky.review}
-                </p>
-
-                <a href="${whisky.link}" target="_blank" class="button">Info</a>
             </div>
         `;
         whiskyContainer.innerHTML += cardHTML;
@@ -178,6 +212,7 @@ const attachListeners = () => {
     const allControls = document.querySelectorAll('#controls select');
     allControls.forEach(control => {
         control.addEventListener('change', () => {
+            saveToLocalStorage();
             const filteredAndSortedData = filterAndSortData(whiskies);
             renderWhiskies(filteredAndSortedData);
         });
@@ -186,5 +221,5 @@ const attachListeners = () => {
 
 // Render everything
 renderControls();
-renderWhiskies(whiskies);
+renderWhiskies(filterAndSortData(whiskies)); // Apply filters and sorting immediately after loading controls
 attachListeners();
