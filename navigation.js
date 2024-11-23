@@ -21,8 +21,11 @@ let navigation = `
         <li class="nav-item">
           <a class="nav-link" href="countries.html">Countries</a>
         </li>
-         <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="regions.html">Regions</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="bottles.html">Bottles</a>
         </li>
     </div>
   </div>
